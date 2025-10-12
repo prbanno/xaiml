@@ -16,7 +16,7 @@ warnings.filterwarnings("ignore")
 # ----------------------------
 # App Title
 # ----------------------------
-st.title("🔍 Explainable AI (XAI) for Regression")
+st.title("Explainable AI (XAI) for Regression")
 st.markdown("""
 Train regression models and explore explainability insights using SHAP and correlation heatmaps.
 Select a dataset, pick a model, and see predictions and explanations below.
@@ -25,7 +25,7 @@ Select a dataset, pick a model, and see predictions and explanations below.
 # ----------------------------
 # Dataset Selection
 # ----------------------------
-st.sidebar.header("1️⃣ Dataset Selection")
+st.sidebar.header("Dataset Selection")
 dataset_choice = st.sidebar.selectbox(
     "Select Dataset",
     ["California Housing (Default)", "Upload your own CSV"]
@@ -37,18 +37,18 @@ if dataset_choice == "California Housing (Default)":
     housing = fetch_california_housing(as_frame=True)
     X = housing.data
     y = housing.target
-    st.sidebar.success("✅ Using California Housing dataset")
+    st.sidebar.success("Using California Housing dataset")
 else:
-    uploaded_file = st.sidebar.file_uploader("📂 Upload your CSV file", type=["csv"])
+    uploaded_file = st.sidebar.file_uploader("Upload your CSV file", type=["csv"])
     if uploaded_file is not None:
         try:
             df = pd.read_csv(uploaded_file, encoding="latin1")
         except UnicodeDecodeError:
             df = pd.read_csv(uploaded_file, encoding="ISO-8859-1")
-        target_col = st.sidebar.selectbox("🎯 Select Target Column (y)", df.columns)
+        target_col = st.sidebar.selectbox("Select Target Column (y)", df.columns)
         y = df[target_col]
         X = df.drop(columns=[target_col])
-        st.sidebar.success("✅ Custom dataset loaded")
+        st.sidebar.success("Custom dataset loaded")
     else:
         st.warning("Please upload a CSV file to continue.")
         st.stop()
@@ -56,7 +56,7 @@ else:
 # ----------------------------
 # Model Selection
 # ----------------------------
-st.sidebar.header("2️⃣ Choose Regression Model")
+st.sidebar.header("Choose Regression Model")
 model_choice = st.sidebar.selectbox(
     "Select a Model",
     ["Linear Regression", "Decision Tree Regressor", "Random Forest Regressor"]
@@ -65,7 +65,7 @@ model_choice = st.sidebar.selectbox(
 # ----------------------------
 # Train & Explain
 # ----------------------------
-if st.sidebar.button("🚀 Train & Explain"):
+if st.sidebar.button("Train & Explain"):
     # Split data
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
@@ -83,7 +83,7 @@ if st.sidebar.button("🚀 Train & Explain"):
     # ----------------------------
     # Model Evaluation Metrics
     # ----------------------------
-    st.subheader("📈 Model Evaluation")
+    st.subheader("Model Evaluation")
     mse = mean_squared_error(y_test, y_pred)
     rmse = np.sqrt(mse)
     mae = mean_absolute_error(y_test, y_pred)
@@ -96,7 +96,7 @@ if st.sidebar.button("🚀 Train & Explain"):
     col4.metric("R² Score", f"{r2:.3f}")
 
     # Performance interpretation
-    with st.expander("📊 What do these metrics mean?"):
+    with st.expander(" What do these metrics mean?"):
         st.markdown(f"""
         - **MSE (Mean Squared Error)**: {mse:.2f} - Average squared difference between predictions and actual values. Lower is better.
         - **RMSE (Root Mean Squared Error)**: {rmse:.2f} - Square root of MSE, in same units as target variable. Easier to interpret.
@@ -108,7 +108,7 @@ if st.sidebar.button("🚀 Train & Explain"):
         """)
 
     # Regression Plot
-    st.subheader("📊 Regression Plot: Actual vs Predicted")
+    st.subheader(" Regression Plot: Actual vs Predicted")
     fig, ax = plt.subplots(figsize=(6, 5))
     sns.scatterplot(x=y_test, y=y_pred, color="dodgerblue", label="Predicted", alpha=0.6)
     sns.lineplot(x=y_test, y=y_test, color="orange", label="Ideal Fit", linewidth=2)
@@ -121,9 +121,9 @@ if st.sidebar.button("🚀 Train & Explain"):
     # ----------------------------
     # SHAP Explainability
     # ----------------------------
-    st.subheader("🤖 SHAP Explainability Analysis")
+    st.subheader("SHAP Explainability Analysis")
 
-    with st.expander("ℹ️ What is SHAP?"):
+    with st.expander("What is SHAP?"):
         st.markdown("""
         **SHAP (SHapley Additive exPlanations)** is a unified approach to explain the output of machine learning models.
 
@@ -205,21 +205,21 @@ if st.sidebar.button("🚀 Train & Explain"):
         st.write("**Key Insights from SHAP Analysis:**")
         top_3_features = [X_test.columns[i] for i in top_features]
         st.markdown(f"""
-        🔍 **Most Important Features**: {', '.join(top_3_features)}
+         **Most Important Features**: {', '.join(top_3_features)}
 
         These features have the highest average impact on predictions across all samples.
         The model relies heavily on these features to make accurate predictions.
         """)
 
     except Exception as e:
-        st.error(f"❌ SHAP explainability failed: {e}")
+        st.error(f"SHAP explainability failed: {e}")
 
     # ----------------------------
     # Correlation Heatmap
     # ----------------------------
-    st.subheader("📌 Feature Correlation Analysis")
+    st.subheader("Feature Correlation Analysis")
 
-    with st.expander("ℹ️ Understanding Correlation"):
+    with st.expander("Understanding Correlation"):
         st.markdown("""
         Correlation measures linear relationships between features:
         - **+1**: Perfect positive correlation
@@ -242,7 +242,7 @@ if st.sidebar.button("🚀 Train & Explain"):
                 high_corr_pairs.append((corr.columns[i], corr.columns[j], corr.iloc[i, j]))
 
     if high_corr_pairs:
-        st.warning("⚠️ **High Correlations Detected:**")
+        st.warning("**High Correlations Detected:**")
         for feat1, feat2, corr_val in high_corr_pairs:
             st.write(f"- {feat1} ↔ {feat2}: {corr_val:.3f}")
         st.info("High correlation between features may indicate redundancy. Consider feature selection.")
@@ -250,7 +250,7 @@ if st.sidebar.button("🚀 Train & Explain"):
     # ----------------------------
     # Feature Importance
     # ----------------------------
-    st.subheader("🌟 Model-Based Feature Importance")
+    st.subheader("Model-Based Feature Importance")
 
     if model_choice in ["Decision Tree Regressor", "Random Forest Regressor"]:
         importance = model.feature_importances_
@@ -276,9 +276,9 @@ if st.sidebar.button("🚀 Train & Explain"):
     # ----------------------------
     # Residual Analysis
     # ----------------------------
-    st.subheader("🔬 Residual Analysis")
+    st.subheader("Residual Analysis")
 
-    with st.expander("ℹ️ What are Residuals?"):
+    with st.expander("What are Residuals?"):
         st.markdown("""
         Residuals are the differences between actual and predicted values.
         - **Good model**: Residuals randomly distributed around zero
@@ -318,17 +318,17 @@ if st.sidebar.button("🚀 Train & Explain"):
     # ----------------------------
     # Executive Summary
     # ----------------------------
-    st.subheader("📋 Executive Summary")
+    st.subheader("Executive Summary")
 
     # Determine model quality
     if r2 > 0.7:
-        quality = "**Good** ✅"
+        quality = "**Good** "
         recommendation = "The model performs well and can be used for predictions with confidence."
     elif r2 > 0.4:
-        quality = "**Moderate** ⚠️"
+        quality = "**Moderate** "
         recommendation = "The model shows moderate performance. Consider feature engineering or trying different algorithms."
     else:
-        quality = "**Poor** ❌"
+        quality = "**Poor** "
         recommendation = "The model needs significant improvement. Review feature selection and consider more complex models."
 
     st.markdown(f"""
@@ -355,7 +355,7 @@ if st.sidebar.button("🚀 Train & Explain"):
     """)
 
     # Download predictions
-    st.subheader("💾 Download Predictions")
+    st.subheader("Download Predictions")
     results_df = pd.DataFrame({
         'Actual': y_test.values,
         'Predicted': y_pred,
@@ -363,7 +363,6 @@ if st.sidebar.button("🚀 Train & Explain"):
     })
     csv = results_df.to_csv(index=False)
     st.download_button(
-        label="📥 Download Predictions CSV",
         data=csv,
         file_name="predictions.csv",
         mime="text/csv"
