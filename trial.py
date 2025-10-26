@@ -354,16 +354,3 @@ if st.sidebar.button("Train & Explain"):
     - Residual analysis shows {'random distribution (good)' if abs(residuals.mean()) < 0.1 else 'some systematic bias (needs attention)'}
     """)
 
-    # Download predictions
-    st.subheader("Download Predictions")
-    results_df = pd.DataFrame({
-        'Actual': y_test.values,
-        'Predicted': y_pred,
-        'Residual': residuals.values
-    })
-    csv = results_df.to_csv(index=False)
-    st.download_button(
-        data=csv,
-        file_name="predictions.csv",
-        mime="text/csv"
-    )
